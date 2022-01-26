@@ -1,0 +1,296 @@
+﻿@model  AssetManagementSystem.EntityModel.Partial.AssetAssignVM
+
+@{
+
+    ViewBag.Title = "Asset Assign";
+    int sNo = 0;
+    @Html.Hidden("empId");
+
+}
+
+<br />
+
+<br />
+<h3 style="margin-left:10px ;color: #3c4c6a;"><b>Assign Asset to Employee</b></h3>
+
+<table class="table" id="tblProduct">
+    <tbody>
+        <tr>
+            <td class="col-sm-3"><h4>Please Select Employee</h4></td>
+            <td class="col-sm-3">
+
+                @Html.DropDownList("ddlEmployee", ViewBag.FK_EmployeeInformation as IEnumerable<SelectListItem>, "Select", new { @class = "w-max", })
+
+            </td>
+            <td class="col-sm-2">
+            </td>
+            <td class="col-sm-1">
+                <button type="button" style="float: right" id="btnAddRows" class="btn btn-primary">Add Row</button>
+
+            </td>
+            <td class="col-sm-1">
+                <button type="button" style="float: right" id="btnSave" class="btn btn-success">Save</button>
+            </td>
+            <td class="col-sm-1">
+                <button type="button" style="float: right" id="btnEnable" class="btn btn-warning">Enable</button>
+            </td>
+            @*<td class="col-sm-1">
+                    <button type="button" style="float: right; background: black; color: white;" id="btnDeActive" class="btn btn-default">DeActive All</button>
+                </td>*@
+        </tr>
+    </tbody>
+</table>
+
+<table class="table table-striped table-hover border-color" id="tblAssetDetail">
+    <thead>
+        <tr>
+            <th scope="col">S.No</th>
+            <th scope="col" style="display:none;">Asset ID</th>
+            <th scope="col">Asset</th>
+            <th scope="col">Description</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Is Active</th>
+        </tr>
+    </thead>
+    <tbody id="detailTBody">
+
+        @for (int i = 0; i < Model.assetAssignsList.Count(); i++)
+
+        {
+            <tr>
+                <td>
+                    @Convert.ToInt32(++sNo)
+                </td>
+                <td style="display:none;">
+                    @Html.TextBoxFor(m => m.assetAssignsList[i].Id, new { @class = "EnabledDisbaled form-control", @disabled = true })
+                </td>
+                <td>
+                    @*@Html.DropDownListFor(m => m.assetAssignsList[i].FK_Asset, ViewBag.FK_Asset as IEnumerable<SelectListItem>, htmlAttributes: new { @class = "EnabledDisbaled form-control" })*@
+                    @{
+
+                        int? selectedValue = Model.assetAssignsList[i].FK_Asset;
+                    }
+
+                    @Html.DropDownListFor(M => M.assetAssignsList[i].FK_Asset, new SelectList(Model.assetList, "Id", "Name", selectedValue), htmlAttributes: new { @class = "EnabledDisbaled form-control" })
+                </td>
+                <td>
+                    @Html.TextBoxFor(m => m.assetAssignsList[i].Description, new { @class = "EnabledDisbaled form-control" })
+                </td>
+                <td>
+                    @Html.EditorFor(m => m.assetAssignsList[i].CreatedOn, new { @class = "EnabledDisbaled form-control", @type = "date",@style= "height:34px" })
+                </td>
+                <td>
+                    @Html.CheckBoxFor(m => m.assetAssignsList[i].IsActive, new { @class = "EnabledDisbaled " })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script src="~/Scripts/jquery-3.6.0.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        //  $("#ddlEmployee").select2();
+
+        $("#btnEnable").click(function () {
+
+            if ($(".EnabledDisbaled").is(':disabled') == true) {
+                $(".EnabledDisbaled").removeAttr("disabled");
+                $("#btnEnable").text("Disabled");
+            } else {
+                $(".EnabledDisbaled").attr("disabled", "true");
+                $("#btnEnable").text("Enable");
+            }
+
+        });
+
+        $("#btnAddRows").click(function () {
+
+            AddRowsInAsset();
+        });
+
+
+        $("#btnSave").click(function () {
+
+            SaveAsset();
+        });
+
+        function SaveAsset() {
+
+            var assetAssignsList = {};
+
+            assetAssignsList= GetAsstDetailData();
+
+            debugger
+            if ($('#ddlEmployee').val()) {
+
+                $.ajax({
+                    url: '/AssetAssign/AddEdit',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    data: JSON.stringify(assetAssignsList),
+                    // contentType: "application/json; charset=utf-8",
+                    success: function (response) {
+                        debugger
+                        if (response.isSuccess) {
+
+                            swal("Success", response.message, "success");
+                        }
+                        else
+                            swal("Error", "Please contact your software vendor.", "error");
+                    },
+                    error: function (error) {
+                        swal("Error", response.message, "error");
+                    }
+                });
+
+            } else {
+
+                swal("Error", "You can not create a Record without selection of Employee, Please Select an Employee.", "error");
+            }
+        }
+
+        function GetAsstDetailData() {
+            var assetAssignArray = {};
+            var assetAssignsList = new Array();
+
+            $("#tblAssetDetail").find("tbody tr").each(function () {
+                assetAssignArray = {};
+
+                var Id = $(this).find("td:eq(1) input[type='text']").val();
+                var assignAsset = $(this).find("select").val();
+                var description = $(this).find("td:eq(3) input[type='text']").val();
+                var createdOn = $(this).find("td:eq(4) input[type='date']").val();
+                var isActive = $(this).find("td:eq(5) input[type='checkbox']").is(':checked');
+                debugger
+                assetAssignArray.Id = Id;
+                assetAssignArray.FK_EmployeeInformation = $("#ddlEmployee").val();
+                assetAssignArray.FK_Asset = assignAsset;
+                assetAssignArray.Description = description;
+                assetAssignArray.createdOn = createdOn;
+                assetAssignArray.isActive = isActive;
+
+                assetAssignsList.push(assetAssignArray);
+            });
+
+            return assetAssignsList;
+        }
+
+        function AddRowsInAsset() {
+
+            let index = $("#detailTBody tr").length;
+
+       /*         <td> <input type='text' id='assetAssignsList_${index}__Id' name='assetAssignsList[${index}].Id' class='EnabledDisbaled form-control' value='System generated' disabled /> </td>*/
+
+            var newRow = `<tr><td>${index + 1}</td><td style='display:none'> <input type='text' id='assetAssignsList_${index}__Id' name='assetAssignsList[${index}].Id' class='EnabledDisbaled form-control' value='System generated' disabled /> </td><td>@Html.DropDownList("FK_Asset", (IEnumerable
+            <SelectListItem>)ViewBag.FK_Asset,new {@class= "form-control EnabledDisbaled" })</td>
+            <td> <input type='text' id='assetAssignsList_${index}__Description' name='assetAssignsList[${index}].Description' class='EnabledDisbaled form-control'  value='' />  </td><td> <input class="text-box single-line EnabledDisbaled" data-val="true" data-val-date="The field CreatedOn must be a date." data-val-required="This Field Can not be Empty" id="assetAssignsList_${index}__CreatedOn" name="assetAssignsList[${index}].CreatedOn"
+type="date" value="">  </td><td> <input type='checkbox' id='assetAssignsList_${index}__IsActive' name='assetAssignsList[${index}].IsActive' class='EnabledDisbaled checkbox' value='' /> </td></tr>`;
+
+
+
+    $("#tblAssetDetail").last().append(newRow);
+        }
+
+
+    });
+
+
+    $('#ddlEmployee').on('change', function () {
+        debugger
+         var selectedEmployeeId = $(this).val();
+
+        if (selectedEmployeeId) {
+
+            $.ajax({
+                url: '/AssetAssign/Index?id='+ selectedEmployeeId + '',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                success: function (response) {
+
+                    var assetDetailHtml = '';
+                 
+                    var val = '';
+
+               
+
+                    $(response.assetAssignsList).each(function (i, v) {
+                        var count = 0;
+                        var htmlDropDown = '';
+                        var htmlDropDownStart = '';
+                        var htmlDropDownEnd = '';
+                        var filterList = {};
+
+                        debugger
+                        if (v.IsActive)
+                            val = 'checked = "checked"';
+                        else
+                            val = '';
+
+                        htmlDropDownStart = `<select class="EnabledDisbaled form-control" data-val="true" data-val-number="The field FK_Asset must be a number." data-val-required="This Field Can not be Empty" id="assetAssignsList_${i}__FK_Asset" name="assetAssignsList[${i}].FK_Asset">`;
+
+                        htmlDropDownEnd = `</select >`;
+
+                        //DropDown Generation Start
+                        $(response.assetList).each(function (index, value) {
+
+                            debugger
+                            if (index==0)
+                                filterList = response.assetList.find(item => item.Id == response.assetAssignsList[i].FK_Asset)
+
+                            if (value.Id == filterList.Id) {
+                                if (count == 0) {
+                                    htmlDropDown += `
+                            <option selected = "selected" value = "${filterList.Id}" > ${filterList.Name}</option >`;
+                                    count++;
+                                }
+                                else {
+                                    htmlDropDown += `<option  value = "${value.Id}" > ${value.Name}</option >`;
+
+                                }
+                            }
+                             else {
+                                htmlDropDown += `<option  value = "${value.Id}" > ${value.Name}</option >`;
+
+                            }
+                        });
+
+                         //DropDown Generation End
+
+                        debugger
+            assetDetailHtml += `<tr><td>${i + 1}</td><td style="display:none;">
+                        <input class="EnabledDisbaled form-control" data-val="true" data-val-number="The field Id must be a number." data-val-required="The Id field is required." disabled="True" id="assetAssignsList_${i}__Id" name="assetAssignsList[${i}].Id" type="text" value="${v.Id}">
+                    </td><td>${htmlDropDownStart + htmlDropDown + htmlDropDownEnd
+                    }</td >
+                <td> <input type='text' id='assetAssignsList_${i}__Description' name='assetAssignsList[${i}].Description' class='EnabledDisbaled form-control'  value='${v.Description}' />  </td><td> <input class="text-box single-line EnabledDisbaled" data-val="true" data-val-date="The field CreatedOn must be a date." data-val-required="This Field Can not be Empty" id="assetAssignsList_${i}__CreatedOn" name="assetAssignsList[${i}].CreatedOn"
+                    type="date" value='${v.CreatedDate}'>  </td><td> <input type='checkbox' ${val} id='assetAssignsList_${i}__IsActive' name='assetAssignsList[${i}].IsActive' class='EnabledDisbaled checkbox' value='${v.IsActive}' /> </td></tr>`;
+
+                    });
+
+                    $("#detailTBody").html(assetDetailHtml);
+                },
+                error: function (error) {
+                    swal("Error", "Please contact your software vendor.", "error");
+                }
+            });
+        }
+    });
+
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+        if (month.length < 2)
+            month = '0' + month;
+        if (day.length < 2)
+            day = '0' + day;
+
+        return [year, month, day].join('-');
+    }
+</script>

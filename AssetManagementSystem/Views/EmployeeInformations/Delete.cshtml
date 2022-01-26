@@ -1,0 +1,120 @@
+﻿@model AssetManagementSystem.EntityModel.EmployeeInformation
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>EmployeeInformation</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FatherName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FatherName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmployeCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmployeCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CNICNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CNICNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PhoneNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CellNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CellNo)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.FK_Department)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FK_Department)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FK_Designation)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FK_Designation)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+
+        @*<dt>
+            @Html.DisplayNameFor(model => model.ModifiedOn)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedOn)
+        </dd>*@
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+<div class="form-actions no-color">
+    <input type="submit" value="Delete" class="btn btn-danger" /> |
+    @Html.ActionLink("Back to Lis", "Index", null, htmlAttributes: new { @class = "btn btn-warning" })
+</div>
+    }
+</div>

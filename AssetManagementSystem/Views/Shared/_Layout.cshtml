@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/sweetalert/sweet-alert.css" rel="stylesheet" />
+
+    <style>
+       /* .control-label{
+            color:white;
+        }*/
+        .card {
+            border-radius: 31px;
+            border: groove;
+        }
+        .border-color {
+            border-top: 1.2px solid #101010;
+        }
+        .bg-success {
+            background-color: #198754;
+        }
+        .bg-info {
+            background-color: #0dcaf0;
+        }
+        .bg-danger {
+            background-color: #dc3545;
+        }
+        .h3color {
+            color: #3c4c6a;
+            font-weight:bold
+        }
+        .center {
+            margin: auto;
+            width: 60%;
+           
+            padding: 10px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                
+                @Html.ActionLink("LogIn", "LogIn", "LogIns", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("AMS", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="@Url.Action("Index","EmployeeInformations")">
+                            Employee
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" style="background-color:black">
+                            <li><a style="color:white;" href="@Url.Action("Index","EmployeeInformations")">Employee's List</a></li>
+                            <li><a style="color:white" href="@Url.Action("Create","EmployeeInformations")">Create Employee</a></li>
+
+                        </ul>
+                    </li>
+                    <li>@Html.ActionLink("Assign Assets", "Index", "AssetAssign")</li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="@Url.Action("Index","Assets")">
+                            Asset
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" style="background-color:black">
+                            <li><a style="color:white;" href="@Url.Action("Index","Assets")">Assits List</a></li>
+                            <li><a style="color:white;" href="@Url.Action("Create","Assets")">Create Assets</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="@Url.Action("Index","Departments")">
+                            Departments
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" style="background-color:black">
+                            <li><a style="color:white;" href="@Url.Action("Index","Departments")">Departments List</a></li>
+                            <li><a style="color:white;" href="@Url.Action("Create","Departments")">Create Departments</a></li>
+                        </ul>
+                    </li>
+
+        
+
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" data-toggle="dropdown" href="@Url.Action("Index","Designations")">
+                            Designations
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu" style="background-color:black">
+                            <li><a style="color:white;" href="@Url.Action("Index","Designations")">Designations List</a></li>
+                            <li><a style="color:white;" href="@Url.Action("Create","Designations")">Create Designations</a></li>
+                        </ul>
+                    </li>
+
+
+                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        @*<footer>
+            <p><a href="http://www.zsicon.com/" target="_blank">http://www.zsicon.com/</a></p>
+        </footer>*@
+        <!-- ======= Footer ======= -->
+        <footer id="footer">
+
+
+            <div class="footer-top">
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-3 col-md-6 footer-contact">
+                            <h3 class="h3color"><b>Your Company Name</b></h3>
+                            <p>
+                                Your Company Address..
+                                @*Gulshan-e-Iqbal Block 6 <br>
+                                St-5 row 2, Office#2 Amjad view<br>
+                                Karachi.<br><br>
+                                <strong>Mobile#:</strong>+92-343-8063996 or +92-316-2867017<br>
+                                <strong>Email:</strong>info@ZSIcon.com<br>*@
+                            </p>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 footer-links">
+                      
+                            <h3 class="h3color"><b>Useful Links</b></h3>
+                            <ul>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">About us</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">Services</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">Terms of service</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">Privacy policy</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 footer-links">
+              
+                            <h3 class="h3color"><b>Our Services</b></h3>
+                            <ul>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">Web Designing</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">CMS (Content Management System)</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">SEO</a></li>
+                                <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Designing</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="col-lg-3 col-md-6 footer-links">
+                            <h3 class="h3color"><b>Our Social Networks</b></h3>
+                            <p>You Can Follow us on Social Network, We Also Update on Social Network of Our Privacy Policies and Terms and Conditions.</p>
+                            <div class="social-links mt-3">
+                                <a href="#" class="bxl-twitter"><i class="bx bxl-twitter"></i>twitter</a>
+                                <a href="#" class="bxl-facebook"><i class="bx bxl-facebook"></i>facebook</a>
+                                <a href="#" class="bxl-instagram"><i class="bx bxl-instagram"></i>instagram</a>
+                              
+                                <a href="#" class="bxl-linkedin"><i class="bx bxl-linkedin">linkedin</i></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        <hr />
+            <div class="container footer-bottom clearfix">
+                <div class="copyright">
+                    &copy; Copyright <strong><span>ZSIcon</span></strong>. All Rights Reserved
+                </div>
+                <div class="credits">
+
+                    Designed by <a href="http://zsicon.com/" target="_blank">ZSIcon</a>
+                </div>
+            </div>
+        </footer><!-- End Footer -->
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    <script src="~/Scripts/sweetAlert/sweetalert.min.js"></script>
+    @RenderSection("scripts", required: false)
+</body>
+</html>
